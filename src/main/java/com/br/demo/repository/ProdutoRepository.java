@@ -19,5 +19,25 @@ public class ProdutoRepository {
         return produtos.stream().filter(p -> p.getId().equals(id)).findFirst();
     }
 
+    public Produto save(Produto produto){
+        produto.setId(nextId++);
+        produtos.add(produto);
+        return produto;
+    }
+    public Produto update(Produto produto){
+        return produtos.stream()
+                .filter(Produto -> produto.getId().equals(produto.getId()))
+                .findFirst()
+                .map(Produto ->{
+                    produto.setNome(produto.getNome());
+                    produto.setPreco(produto.getPreco());
+                    produto.setNumeroSerie(produto.getNumeroSerie());
+                    return produto;
+        }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+    }
+
+    public void deleteById(Long id){
+        produtos.removeIf(produto -> produto.getId().equals(id));
+    }
 
 }
