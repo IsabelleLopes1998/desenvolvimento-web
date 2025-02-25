@@ -1,5 +1,6 @@
 package com.br.demo.repository;
 
+import com.br.demo.dto.response.ProdutoResponseDTO;
 import com.br.demo.model.Produto;
 import org.springframework.stereotype.Repository;
 
@@ -15,9 +16,10 @@ public class ProdutoRepository {
     public List<Produto> findAll(){
         return produtos;
     }
-    public Optional<Produto> findByID(Long id){
+    public Optional<Produto> findById(Long id){
         return produtos.stream().filter(p -> p.getId().equals(id)).findFirst();
     }
+
 
     public Produto save(Produto produto){
         produto.setId(nextId++);
@@ -39,5 +41,7 @@ public class ProdutoRepository {
     public void deleteById(Long id){
         produtos.removeIf(produto -> produto.getId().equals(id));
     }
+
+
 
 }
