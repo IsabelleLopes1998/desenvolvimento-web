@@ -38,4 +38,22 @@ public class ProdutoService {
         return new ProdutoResponseDTO(produtoSalvo.getId(), produtoSalvo.getNome(), produtoSalvo.getPreco());
     }
 
+    public ProdutoResponseDTO atualizarProduto(Long id, ProdutoRequestDTO produtoRequestDTO){
+        Produto produtoExistente = produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+        produtoExistente.setNome(produtoRequestDTO.getNome());
+        produtoExistente.setPreco(produtoRequestDTO.getPreco());
+        produtoExistente.setNumeroSerie(produtoRequestDTO.getNumeroSerie());
+
+        Produto produtoAtualizado = produtoRepository.update(produtoExistente);
+
+        return new ProdutoResponseDTO(produtoAtualizado.getId(), produtoAtualizado.getNome(), produtoAtualizado.getPreco());
+    }
+
+
+    public void excluirProduto(Long id){
+        produtoRepository.deleteById(id);
+    }
+
+
 }
