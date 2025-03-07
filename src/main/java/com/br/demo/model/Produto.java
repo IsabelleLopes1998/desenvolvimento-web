@@ -7,7 +7,6 @@ public class Produto {
     private String numeroSerie;
 
     public Produto(){
-
     }
 
     public Produto(Long id, String nome, double preco, String numeroSerie) {

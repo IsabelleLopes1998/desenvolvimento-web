@@ -16,6 +16,7 @@ public class ProdutoRepository {
     public List<Produto> findAll(){
         return produtos;
     }
+
     public Optional<Produto> findById(Long id){
         return produtos.stream().filter(p -> p.getId().equals(id)).findFirst();
     }
@@ -41,7 +42,6 @@ public class ProdutoRepository {
     public void deleteById(Long id){
         produtos.removeIf(produto -> produto.getId().equals(id));
     }
-
 
 
 }
