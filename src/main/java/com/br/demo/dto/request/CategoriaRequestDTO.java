@@ -1,26 +1,16 @@
-package com.br.demo.dto;
+package com.br.demo.dto.request;
 
-public class CategoriaDTO {
-    private Long id;
+public class CategoriaRequestDTO {
+
     private String nome;
     private String descricao;
 
-    public CategoriaDTO() {
+    public CategoriaRequestDTO() {
     }
 
-    public CategoriaDTO(Long id, String nome, String descricao) {
-        this.id = id;
+    public CategoriaRequestDTO(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNome() {

@@ -22,7 +22,7 @@ public class CategoriaRepository {
     }
 
     public Categoria save(Categoria categoria){
-        //categoria.setId(nextId++);
+        categoria.setId(nextId++);
         categorias.add(categoria);
         return categoria;
     }

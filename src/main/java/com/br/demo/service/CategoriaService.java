@@ -1,10 +1,8 @@
 package com.br.demo.service;
 
-import com.br.demo.dto.CategoriaDTO;
-import com.br.demo.dto.request.ProdutoRequestDTO;
-import com.br.demo.dto.response.ProdutoResponseDTO;
+import com.br.demo.dto.request.CategoriaRequestDTO;
+import com.br.demo.dto.response.CategoriaResponseDTO;
 import com.br.demo.model.Categoria;
-import com.br.demo.model.Produto;
 import com.br.demo.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,35 +18,34 @@ public class CategoriaService {
         this.categoriaRepository = categoriaRepository;
     }
 
-    public List<CategoriaDTO> listarCategorias(){
+    public List<CategoriaResponseDTO> listarCategorias(){
         return categoriaRepository.findAll().stream()
-                .map(categoria -> new CategoriaDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao()))
+                .map(categoria -> new CategoriaResponseDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao()))
                 .collect(Collectors.toList());
     }
 
-    public CategoriaDTO buscarPorId(Long id){
+    public CategoriaResponseDTO buscarPorId(Long id){
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrado"));
-        return new CategoriaDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
+        return new CategoriaResponseDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
     }
 
-    public CategoriaDTO criarCategoria(CategoriaDTO categoriaDTO){
-        Categoria novaCategoria = new Categoria(categoriaDTO.getId(), categoriaDTO.getNome(), categoriaDTO.getDescricao());
+    public CategoriaResponseDTO criarCategoria(CategoriaRequestDTO categoriaRequestDTO){
+        Categoria novaCategoria = new Categoria(null, categoriaRequestDTO.getNome(), categoriaRequestDTO.getDescricao());
         Categoria categoriaSalva = categoriaRepository.save(novaCategoria);
-        return new CategoriaDTO(categoriaSalva.getId(), categoriaSalva.getNome(), categoriaSalva.getDescricao());
+        return new CategoriaResponseDTO(categoriaSalva.getId(), categoriaSalva.getNome(), categoriaSalva.getDescricao());
     }
 
-    public CategoriaDTO atualizarCategoria(Long id, CategoriaDTO categoriaDTO){
+    public CategoriaResponseDTO atualizarCategoria(Long id, CategoriaRequestDTO categoriaRequestDTO){
         Categoria categoriaExistente = categoriaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
 
-        categoriaExistente.setId(categoriaDTO.getId());
-        categoriaExistente.setNome(categoriaDTO.getNome());
-        categoriaExistente.setDescricao(categoriaDTO.getDescricao());
+        categoriaExistente.setNome(categoriaRequestDTO.getNome());
+        categoriaExistente.setDescricao(categoriaRequestDTO.getDescricao());
 
         Categoria categoriaAtualizada = categoriaRepository.update(categoriaExistente);
 
-        return new CategoriaDTO(categoriaAtualizada.getId(), categoriaAtualizada.getNome(), categoriaDTO.getDescricao());
+        return new CategoriaResponseDTO(categoriaAtualizada.getId(), categoriaAtualizada.getNome(), categoriaAtualizada.getDescricao());
     }
 
     public void excluirCategoria(Long id){
