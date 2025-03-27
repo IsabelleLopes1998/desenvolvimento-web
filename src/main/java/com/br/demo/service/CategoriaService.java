@@ -7,6 +7,7 @@ import com.br.demo.repository.CategoriaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,27 +26,27 @@ public class CategoriaService {
     }
 
     public CategoriaResponseDTO buscarPorId(Long id){
-        Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrado"));
-        return new CategoriaResponseDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
+        return categoriaRepository.findById(id)
+                .map(categoria -> new CategoriaResponseDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao()))
+                .orElse(null);
     }
 
     public CategoriaResponseDTO criarCategoria(CategoriaRequestDTO categoriaRequestDTO){
-        Categoria novaCategoria = new Categoria(null, categoriaRequestDTO.getNome(), categoriaRequestDTO.getDescricao());
-        Categoria categoriaSalva = categoriaRepository.save(novaCategoria);
-        return new CategoriaResponseDTO(categoriaSalva.getId(), categoriaSalva.getNome(), categoriaSalva.getDescricao());
+        Categoria categoria = new Categoria(null, categoriaRequestDTO.getNome(), categoriaRequestDTO.getDescricao());
+        categoria = categoriaRepository.save(categoria);
+
+        return new CategoriaResponseDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
     }
 
     public CategoriaResponseDTO atualizarCategoria(Long id, CategoriaRequestDTO categoriaRequestDTO){
-        Categoria categoriaExistente = categoriaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-
-        categoriaExistente.setNome(categoriaRequestDTO.getNome());
-        categoriaExistente.setDescricao(categoriaRequestDTO.getDescricao());
-
-        Categoria categoriaAtualizada = categoriaRepository.update(categoriaExistente);
-
-        return new CategoriaResponseDTO(categoriaAtualizada.getId(), categoriaAtualizada.getNome(), categoriaAtualizada.getDescricao());
+        Optional<Categoria> optionalCategoria = categoriaRepository.findById(id);
+        if(optionalCategoria.isPresent()){
+            Categoria categoria = optionalCategoria.get();
+            categoria.setNome(categoriaRequestDTO.getNome());
+            categoria.setDescricao(categoriaRequestDTO.getDescricao());
+            return new CategoriaResponseDTO(categoria.getId(), categoria.getNome(), categoria.getDescricao());
+        }
+        return  null;
     }
 
     public void excluirCategoria(Long id){

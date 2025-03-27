@@ -14,6 +14,7 @@ public class CategoriaResponseDTO {
         this.descricao = descricao;
     }
 
+
     public Long getId() {
         return id;
     }
